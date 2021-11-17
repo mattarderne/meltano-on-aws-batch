@@ -101,7 +101,7 @@ resource "aws_security_group" "meltano-batch" {
 }
 
 resource "aws_batch_compute_environment" "meltano" {
-  compute_environment_name = "meltano-sample"
+  compute_environment_name = "meltano-smoke-test"
   compute_resources {
     instance_role = aws_iam_instance_profile.instance-role.arn
     instance_type = [
@@ -119,18 +119,18 @@ resource "aws_batch_compute_environment" "meltano" {
 }
 
 resource "aws_batch_job_queue" "meltano" {
-  name = "meltano-queue"
+  name = "meltano-smoke-test-queue"
   state = "ENABLED"
   priority = 1
   compute_environments = [ aws_batch_compute_environment.meltano.arn ]
 }
 
 resource "aws_ecr_repository" "meltano-job-repo" {
-  name = "aws-batch-meltano-sample"
+  name = "aws-batch-meltano-smoke-test"
 }
 
 resource "aws_s3_bucket" "image-bucket" {
-  bucket_prefix = "aws-batch-sample-"
+  bucket_prefix = "aws-batch-smoke-test"
 }
 
 resource "aws_iam_role" "job-role" {
@@ -181,7 +181,7 @@ resource "aws_iam_role_policy_attachment" "job-role" {
 }
 
 resource "aws_batch_job_definition" "meltano-job" {
-  name = "meltano-job"
+  name = "meltano-smoke-test-job"
   type = "container"
   depends_on = [
     aws_ecr_repository.meltano-job-repo,
