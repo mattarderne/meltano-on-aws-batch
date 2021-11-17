@@ -33,7 +33,7 @@ output "security_group_id" {
 # }
 
 output "ecr_repository" {
-  value = "${aws_ecr_repository.image-processor-job-repo.repository_url}"
+  value = "${aws_ecr_repository.meltano-job-repo.repository_url}"
 }
 
 output "image_bucket" {

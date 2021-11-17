@@ -2,9 +2,9 @@
 NAME="meltano-playlist-elt"
 AWS_ACCOUNT="<AWS ACCOUNT>"
 REGION="eu-west-1"
-TAG="airflow"
+TAG="meltano"
 
-# NB: currently requires creation of an ECR here https://eu-west-2.console.aws.amazon.com/ecr/repositories?region=eu-west-2 using the $NAME var
+# NB: currently requires creation of an ECR, which the Terraform script outputs
 
 # Retrieve an authentication token and authenticate your Docker client to your registry.
 aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$REGION.amazonaws.com
