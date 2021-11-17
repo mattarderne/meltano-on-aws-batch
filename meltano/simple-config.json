@@ -1,0 +1,9 @@
+{
+    "streams": [
+      {
+        "stream_name":  "animals",
+        "input_filename": "animals.jsonl"
+      }
+    ]
+  }
+  

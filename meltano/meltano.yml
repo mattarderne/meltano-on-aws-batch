@@ -1,29 +1,20 @@
 version: 1
 send_anonymous_usage_stats: true
-project_id: 123
+project_id: e69b8f34-4b71-49cf-9021-18bf57cd3f70
 plugins:
   extractors:
-  loaders:
-  - name: target-stitch
-    namespace: target_stitch
-    pip_url: target-stitch
-    executable: target-stitch
-    settings:
-    - name: client_id
-      kind: integer
-    - name: token
-      kind: password
-    - name: small_batch_url
-      kind: string
-    - name: big_batch_url
-      kind: string
-    - name: batch_size_preferences
-      kind: object
+  - name: tap-smoke-test
+    namespace: tap_smoke_test
+    pip_url: git+https://gitlab.com/meltano/tap-smoke-test
+    executable: tap-smoke-test
     config:
-      client_id: 
-      small_batch_url: https://api.stitchdata.com/v2/import/batch
-      big_batch_url: https://api.stitchdata.com/v2/import/batch
-      batch_size_preferences:
-        full_table_streams: []
-  orchestrators:
-schedules:
+      streams: [
+      {
+        "stream_name":  "animals",
+        "input_filename": "animals.jsonl"
+      }
+    ]
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
