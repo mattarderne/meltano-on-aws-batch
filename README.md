@@ -19,7 +19,6 @@ To run the project, you will to:
 ```
 git clone git@github.com:mattarderne/meltano-batch.git
 cd meltano-batch/terraform
-vi secrets.tfvars
 terraform init
 ```
 
@@ -47,7 +46,7 @@ docker run \
     elt tap-smoke-test target-jsonl
 
 # tag the image
-$ docker tag aws-batch-image-processor-sample:latest <MY_REPO_NAME>:latest
+$ docker tag aws-batch-meltano:latest <MY_REPO_NAME>:latest
 
 # push the image to the repository
 docker push <MY_REPO_NAME>:latest

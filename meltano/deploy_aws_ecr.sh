@@ -1,5 +1,5 @@
 #!/bin/bash
-NAME="meltano-playlist-elt"
+NAME="meltano-elt"
 AWS_ACCOUNT="<AWS ACCOUNT>"
 REGION="eu-west-1"
 TAG="meltano"
