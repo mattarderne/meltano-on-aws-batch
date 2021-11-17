@@ -1,0 +1,9 @@
+/venv
+/.meltano
+.env
+*.venv
+*.debug
+.terraform*
+
+*.tfvars
+*.tfstate*

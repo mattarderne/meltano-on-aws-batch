@@ -1,0 +1,3 @@
+meltano==1.87.1
+Flask-WTF==0.14.3
+WTForms==2.3.3

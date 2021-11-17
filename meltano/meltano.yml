@@ -1,0 +1,29 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: 123
+plugins:
+  extractors:
+  loaders:
+  - name: target-stitch
+    namespace: target_stitch
+    pip_url: target-stitch
+    executable: target-stitch
+    settings:
+    - name: client_id
+      kind: integer
+    - name: token
+      kind: password
+    - name: small_batch_url
+      kind: string
+    - name: big_batch_url
+      kind: string
+    - name: batch_size_preferences
+      kind: object
+    config:
+      client_id: 
+      small_batch_url: https://api.stitchdata.com/v2/import/batch
+      big_batch_url: https://api.stitchdata.com/v2/import/batch
+      batch_size_preferences:
+        full_table_streams: []
+  orchestrators:
+schedules:
