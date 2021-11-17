@@ -5,7 +5,7 @@ plugins:
   extractors:
   - name: tap-smoke-test
     namespace: tap_smoke_test
-    pip_url: git+https://gitlab.com/meltano/tap-smoke-test
+    pip_url: ./tap-smoke-test/
     executable: tap-smoke-test
     config:
       streams: [

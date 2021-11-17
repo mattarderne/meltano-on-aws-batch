@@ -29,9 +29,11 @@ RUN pip3 install -r requirements.txt
 
 # Copy meltano files 
 COPY ./meltano.yml . 
+COPY ./tap-smoke-test ./tap-smoke-test
+# COPY ./output ./output
 
 # Install all plugins into the `.meltano` directory
-RUN meltano install loader target-stitch
+RUN meltano install
 
 # Pin `discovery.yml` manifest by copying cached version to project root
 RUN cp -n .meltano/cache/discovery.yml . 2>/dev/null || :
@@ -41,6 +43,10 @@ ENV MELTANO_PROJECT_READONLY 1
 
 # Copy over remaining project files
 COPY . .
+
+# Smoke test
+RUN mkdir output
+RUN meltano elt tap-smoke-test target-jsonl
 
 # Expose the Meltano port
 EXPOSE 5000
