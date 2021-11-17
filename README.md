@@ -52,4 +52,6 @@ $ docker tag aws-batch-meltano:latest <MY_REPO_NAME>:latest
 docker push <MY_REPO_NAME>:latest
 ```
 
+Now go to AWS Batch and create a job from the job definition page
+https://eu-west-1.console.aws.amazon.com/batch/home?region=eu-west-1#job-definition
 
