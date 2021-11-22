@@ -13,9 +13,26 @@ variable "prefix" {
     default = "melt"
 }
 
+variable "env" {
+    description = "TODO: Change this if you want to tag Prod version"
+    default = "DEV"
+}
+
 variable "aws_profile" {
   description = "TODO: Change this to whatever your AWS CLI profile is saved as in ~/.aws/credentials"
   type        = string
   default     = "focal"
 }
 
+
+variable "slack_webhook_toggle" {
+  description = "TODO: Switch on the slack webhook by changing to 'true'. Requires slack_webhook to be populated"
+  type        = string
+  default     = "true"
+}
+
+variable "slack_webhook" {
+  description = "TODO: Change the secret.tfvars to include a slack webhook for notifications from Lambda"
+  type        = string
+  default     = ""
+}

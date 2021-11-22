@@ -33,7 +33,7 @@ data "aws_subnet_ids" "all" {
 
 
 resource "aws_iam_role" "instance-role" {
-  name = "aws-batch-meltano-role"
+  name = "${var.prefix}-role"
   path = "/BatchSample/"
   assume_role_policy = <<EOF
 {
@@ -50,6 +50,12 @@ resource "aws_iam_role" "instance-role" {
     ]
 }
 EOF
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_iam_role_policy_attachment" "instance-role" {
@@ -58,12 +64,18 @@ resource "aws_iam_role_policy_attachment" "instance-role" {
 }
 
 resource "aws_iam_instance_profile" "instance-role" {
-  name = "aws-batch-meltano-role"
+  name = "${var.prefix}-role"
   role = aws_iam_role.instance-role.name
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_iam_role" "aws-batch-service-role" {
-  name = "aws-batch-service-role"
+  name = "${var.prefix}-service-role"
   path = "/BatchSample/"
   assume_role_policy = <<EOF
 {
@@ -80,6 +92,12 @@ resource "aws_iam_role" "aws-batch-service-role" {
     ]
 }
 EOF
+
+tags = {
+    Project = var.prefix
+    Env = var.env
+ 
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "aws-batch-service-role" {
@@ -88,8 +106,8 @@ resource "aws_iam_role_policy_attachment" "aws-batch-service-role" {
 }
 
 resource "aws_security_group" "meltano-batch" {
-  name = "aws-batch-meltano-security-group"
-  description = "AWS Batch Sample Security Group"
+  name = "${var.prefix}-security-group"
+  description = "AWS Batch Security Group"
   vpc_id = data.aws_vpc.default.id
 
   egress {
@@ -98,10 +116,16 @@ resource "aws_security_group" "meltano-batch" {
     protocol        = "tcp"
     cidr_blocks     = [ "0.0.0.0/0" ]
   }
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_batch_compute_environment" "meltano" {
-  compute_environment_name = "meltano-smoke-test"
+  compute_environment_name = "${var.prefix}-compute"
   compute_resources {
     instance_role = aws_iam_instance_profile.instance-role.arn
     instance_type = [
@@ -116,21 +140,39 @@ resource "aws_batch_compute_environment" "meltano" {
   service_role = aws_iam_role.aws-batch-service-role.arn
   type = "MANAGED"
   depends_on = [ aws_iam_role_policy_attachment.aws-batch-service-role ]
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_batch_job_queue" "meltano" {
-  name = "meltano-smoke-test-queue"
+  name = "${var.prefix}-queue"
   state = "ENABLED"
   priority = 1
   compute_environments = [ aws_batch_compute_environment.meltano.arn ]
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_ecr_repository" "meltano-job-repo" {
-  name = "aws-batch-meltano-smoke-test"
+  name = "${var.prefix}-ecr-repo"
+  
+  tags = {
+    Project = var.prefix
+    Env = var.env
+  }
+  
 }
 
 resource "aws_iam_role" "job-role" {
-  name = "aws-batch-meltano-job-role"
+  name = "${var.prefix}-job-role"
   path = "/BatchSample/"
   assume_role_policy = <<EOF
 {
@@ -147,12 +189,18 @@ resource "aws_iam_role" "job-role" {
     ]
 }
 EOF
+
+tags = {
+    Project = var.prefix
+    Env = var.env
+ 
+  }
 }
 
 
 # ## lambda resource + iam
 resource "aws_iam_role" "lambda-role" {
-  name = "aws-batch-meltano-function-role"
+  name = "${var.prefix}-function-role"
   path = "/BatchSample/"
   assume_role_policy = <<EOF
 {
@@ -169,10 +217,16 @@ resource "aws_iam_role" "lambda-role" {
     ]
 }
 EOF
+
+tags = {
+    Project = var.prefix
+    Env = var.env
+ 
+  }
 }
 
 resource "aws_iam_policy" "lambda-policy" {
-  name = "aws-batch-meltano-function-policy"
+  name = "${var.prefix}-function-policy"
   path = "/BatchSample/"
   policy = <<EOF
 {
@@ -188,6 +242,12 @@ resource "aws_iam_policy" "lambda-policy" {
   ]
 }
 EOF
+
+tags = {
+    Project = var.prefix
+    Env = var.env
+ 
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "lambda-service" {
@@ -199,20 +259,3 @@ resource "aws_iam_role_policy_attachment" "lambda-policy" {
   role = aws_iam_role.lambda-role.name
   policy_arn = aws_iam_policy.lambda-policy.arn
 }
-
-# resource "aws_lambda_function" "submit-job-function" {
-#   function_name = "aws-batch-meltano-function"
-#   filename = "lambda_function.zip"
-#   role = aws_iam_role.lambda-role.arn
-#   handler = "index.handler"
-#   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
-#   runtime = "nodejs14.x"
-#   depends_on = [ "aws_iam_role_policy_attachment.lambda-policy" ]
-#   environment {
-#     variables = {
-#       JOB_DEFINITION = aws_batch_job_definition.meltano-job.arn
-#       JOB_QUEUE = aws_batch_job_queue.meltano.arn
-#       IMAGES_BUCKET = aws_s3_bucket.image-bucket.id
-#     }
-#   }
-# }

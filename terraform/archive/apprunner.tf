@@ -29,3 +29,8 @@ resource "aws_apprunner_service" "meltano-apprunner" {
     Project = "${var.prefix}-meltano"
   }
 }
+
+# output "apprunner_url" {
+#   description = "Apprunner application URL"
+#   value       = aws_apprunner_service.meltano-apprunner.service_url
+# }
