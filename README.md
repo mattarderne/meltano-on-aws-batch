@@ -102,3 +102,15 @@ pip install --target ./lambda requests
 
 Test with `aws lambda ...` command above. It should ping to slack. 
 However it only is pinging when the job starts (or fails to start), not the outcome of the job. Proper setup should be with AWS Batch [SNS Notifications](https://docs.aws.amazon.com/batch/latest/userguide/batch_sns_tutorial.html)
+
+
+# Todo
+
+- [ ] setup a serverless DB to capture state files for incremental loads
+- [ ] work out SNS
+- [ ] work out SNS in Terraform
+- [ ] work out GCP equivalent
+- [ ] Test AWS AppRunnner for frontend
+- [ ] Look into VPC settings
+
+
