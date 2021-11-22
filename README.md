@@ -93,7 +93,12 @@ to
 slack_webhook = "<slack_webook>"
 ```
 3. Change the `var.slack_webhook_toggle` in `variables.tf` file to `true` (lowercase)
-4. Run `terraform apply -var-file="secret.tfvars"`
+4. Install `requests` in the `terraform/lambda` directory
+```bash
+cd terraform #must be run in terraform
+pip install --target ./lambda requests
+```
+5. Run `terraform apply -var-file="secret.tfvars"`
 
 Test with `aws lambda ...` command above. It should ping to slack. 
 However it only is pinging when the job starts (or fails to start), not the outcome of the job. Proper setup should be with AWS Batch [SNS Notifications](https://docs.aws.amazon.com/batch/latest/userguide/batch_sns_tutorial.html)

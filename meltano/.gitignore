@@ -1,8 +1,0 @@
-/venv
-/.meltano
-.env
-.venv
-.debug
-orchestrate/dags/__pycache__/
-*/__pycache__
-.terraform*
