@@ -1,5 +1,5 @@
 # meltano-batch
-Running Meltano ELT on AWS Batch, configured with terraform
+Running Meltano ELT on AWS Batch, infra with Terraform
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ terraform apply
 
 ## Build and Push Docker Image
 
-Once finished, Terraform will output the name of your newly created ECR Repository, e.g. 123456789098.dkr.ecr.us-east-1.amazonaws.com/aws-batch-image-processor-sample. Note this value as we will use it in subsequent steps (referred to as MY_REPO_NAME):
+Once finished, Terraform will output the name of your newly created ECR Repository, e.g. `123456789.dkr.ecr.eu-west-1.amazonaws.com/meltano-batch-ecr-repo:latest` Note this value as we will use it in subsequent steps (referred to as MY_REPO_NAME):
 
 ```bash
 cd ..
@@ -34,7 +34,7 @@ cd meltano
 # build the docker image
 docker build -t aws-batch-meltano .
 
-# test the docker image
+# (optional) test the docker image
 docker run \
     --volume $(pwd)/output:/project/output \
     aws-batch-meltano \
@@ -46,7 +46,7 @@ $ docker tag aws-batch-meltano:latest <MY_REPO_NAME>:latest
 # login to the ECR, replace <region>
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <MY_REPO_NAME>
 
-# push the image to the repository
+# push the image to the ECR repository
 docker push <MY_REPO_NAME>:latest
 ```
 
@@ -84,21 +84,25 @@ By default there are no notifications set. Ideally this should be set by an AWS 
 
 There is the capability to turn on Slack notifications as follows, 
 
-1. Change the below line 
+1. Change the below line in `elt_tap_smoke_test-target_jsonl.tf`:
 `handler          = "lambda.lambda_handler"`
 to
 `handler          = "alerts.lambda_handler"`
-2. Create a [slack webhook](https://api.slack.com/messaging/webhooks) create a `secret.tfvars` file in the `lambda` directory, adding the webhook url
+1. Change the below line in `main.py`:
+`source_file = "lambda/lambda.py"`
+to
+`source_file = "alerts/lambda.py"`
+1. Create a [slack webhook](https://api.slack.com/messaging/webhooks) create a `secret.tfvars` file in the `lambda` directory, adding the webhook url
 ```
 slack_webhook = "<slack_webook>"
 ```
-3. Change the `var.slack_webhook_toggle` in `variables.tf` file to `true` (lowercase)
-4. Install `requests` in the `terraform/lambda` directory
+1. Change the `var.slack_webhook_toggle` in `variables.tf` file to `true` (lowercase)
+1. Install `requests` in the `terraform/lambda` directory
 ```bash
 cd terraform #must be run in terraform
 pip install --target ./lambda requests
 ```
-5. Run `terraform apply -var-file="secret.tfvars"`
+1. Run `terraform apply -var-file="secret.tfvars"`
 
 Test with `aws lambda ...` command above. It should ping to slack. 
 However it only is pinging when the job starts (or fails to start), not the outcome of the job. Proper setup should be with AWS Batch [SNS Notifications](https://docs.aws.amazon.com/batch/latest/userguide/batch_sns_tutorial.html)
