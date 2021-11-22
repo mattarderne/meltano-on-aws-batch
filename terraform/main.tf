@@ -109,7 +109,7 @@ resource "aws_batch_compute_environment" "meltano" {
     ]
     max_vcpus = 6
     min_vcpus = 0
-    security_group_ids = [aws_security_group.meltano-batch.id]
+    security_group_ids = [ aws_security_group.meltano-batch.id ]
     subnets = data.aws_subnet_ids.all.ids
     type = "EC2"
   }
@@ -127,10 +127,6 @@ resource "aws_batch_job_queue" "meltano" {
 
 resource "aws_ecr_repository" "meltano-job-repo" {
   name = "aws-batch-meltano-smoke-test"
-}
-
-resource "aws_s3_bucket" "image-bucket" {
-  bucket_prefix = "aws-batch-smoke-test"
 }
 
 resource "aws_iam_role" "job-role" {
@@ -153,8 +149,30 @@ resource "aws_iam_role" "job-role" {
 EOF
 }
 
-resource "aws_iam_policy" "job-policy" {
-  name = "aws-batch-meltano-job-policy"
+
+# ## lambda resource + iam
+resource "aws_iam_role" "lambda-role" {
+  name = "aws-batch-meltano-function-role"
+  path = "/BatchSample/"
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement":
+    [
+      {
+          "Action": "sts:AssumeRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "lambda.amazonaws.com"
+          }
+      }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "lambda-policy" {
+  name = "aws-batch-meltano-function-policy"
   path = "/BatchSample/"
   policy = <<EOF
 {
@@ -162,99 +180,25 @@ resource "aws_iam_policy" "job-policy" {
   "Statement": [
     {
       "Action": [
-        "s3:Get*"
+        "batch:SubmitJob"
       ],
       "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.image-bucket.arn}",
-        "${aws_s3_bucket.image-bucket.arn}/*"
-      ]
+      "Resource": "*"
     }
   ]
 }
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "job-role" {
-  role = aws_iam_role.job-role.name
-  policy_arn = aws_iam_policy.job-policy.arn
+resource "aws_iam_role_policy_attachment" "lambda-service" {
+  role = aws_iam_role.lambda-role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_batch_job_definition" "meltano-job" {
-  name = "meltano-smoke-test-job"
-  type = "container"
-  depends_on = [
-    aws_ecr_repository.meltano-job-repo,
-    aws_s3_bucket.image-bucket,
-  ]
-  parameters = {
-    bucketName = aws_s3_bucket.image-bucket.id
-  }
-  container_properties = <<CONTAINER_PROPERTIES
-{
-  "image": "${aws_ecr_repository.meltano-job-repo.repository_url}",
-  "jobRoleArn": "${aws_iam_role.job-role.arn}",
-  "vcpus": 2,
-  "memory": 2000,
-  "environment": [
-    { "name": "AWS_REGION", "value": "${var.region}" }
-  ],
-  "command": [
-    "elt"
-  ]
+resource "aws_iam_role_policy_attachment" "lambda-policy" {
+  role = aws_iam_role.lambda-role.name
+  policy_arn = aws_iam_policy.lambda-policy.arn
 }
-CONTAINER_PROPERTIES
-}
-
-# ## lambda resource + iam
-# resource "aws_iam_role" "lambda-role" {
-#   name = "aws-batch-meltano-function-role"
-#   path = "/BatchSample/"
-#   assume_role_policy = <<EOF
-# {
-#     "Version": "2012-10-17",
-#     "Statement":
-#     [
-#       {
-#           "Action": "sts:AssumeRole",
-#           "Effect": "Allow",
-#           "Principal": {
-#             "Service": "lambda.amazonaws.com"
-#           }
-#       }
-#     ]
-# }
-# EOF
-# }
-
-# resource "aws_iam_policy" "lambda-policy" {
-#   name = "aws-batch-meltano-function-policy"
-#   path = "/BatchSample/"
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": [
-#         "batch:SubmitJob"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": "*"
-#     }
-#   ]
-# }
-# EOF
-# }
-
-# resource "aws_iam_role_policy_attachment" "lambda-service" {
-#   role = aws_iam_role.lambda-role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-# }
-
-# resource "aws_iam_role_policy_attachment" "lambda-policy" {
-#   role = aws_iam_role.lambda-role.name
-#   policy_arn = aws_iam_policy.lambda-policy.arn
-# }
 
 # resource "aws_lambda_function" "submit-job-function" {
 #   function_name = "aws-batch-meltano-function"

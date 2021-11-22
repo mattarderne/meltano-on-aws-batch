@@ -1,3 +1,5 @@
+# Docs here https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apprunner_service
+
 resource "aws_iam_service_linked_role" "role_apprunner" {
   # TODO: this doesn't work if there is already a service linked role, in which case you need to specify it in the apprunner config
   aws_service_name = "apprunner.amazonaws.com"

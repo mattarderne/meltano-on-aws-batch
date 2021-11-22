@@ -2,7 +2,7 @@
 NAME="meltano"
 PROJECT=$(gcloud config get-value project)
 IMAGE="gcr.io/$PROJECT/$NAME"
-LOGS="_deploylogs-$PROJECT-$NAME.yaml"
+LOGS="_run-deploy-logs-$PROJECT-$NAME"
 
 gcloud builds submit --tag $IMAGE
 gcloud run deploy --allow-unauthenticated --platform=managed --image $IMAGE $NAME --memory 4Gi --timeout=1000s
