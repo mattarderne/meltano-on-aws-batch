@@ -1,21 +1,21 @@
 variable "region" {
-    description = "TODO: Change this to your region default"
-    default = "eu-west-1"
+  description = "TODO: Change this to your region default"
+  default     = "eu-west-1"
 }
 
 variable "aws_account" {
-    description = "Your AWS account number. Change this to your account number as a default to skip prompts"
-    # default = "12354"
+  description = "Your AWS account number. Change this to your account number as a default to skip prompts"
+  # default = "12354"
 }
 
 variable "prefix" {
-    description = "TODO: Change this to whatever you'd like to prefix the project infrastructure"
-    default = "melt"
+  description = "TODO: Change this to whatever you'd like to prefix the project infrastructure and set as the tags for the project"
+  default     = "meltano-batch"
 }
 
 variable "env" {
-    description = "TODO: Change this if you want to tag Prod version"
-    default = "DEV"
+  description = "TODO: Change this if you want to tag Prod version"
+  default     = "DEV"
 }
 
 variable "aws_profile" {
@@ -28,7 +28,7 @@ variable "aws_profile" {
 variable "slack_webhook_toggle" {
   description = "TODO: Switch on the slack webhook by changing to 'true'. Requires slack_webhook to be populated"
   type        = string
-  default     = "true"
+  default     = "false"
 }
 
 variable "slack_webhook" {

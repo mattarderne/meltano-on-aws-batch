@@ -1,9 +1,14 @@
+*/__pycache__
+*/.DS_Store
 /venv
 /.meltano
 .env
 *.venv
 *.debug
 .terraform*
-
 *.tfvars
 *.tfstate*
+terraform/lambda/**/
+*/outfile
+*lambda_function.zip
+meltano/output/

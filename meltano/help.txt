@@ -1,0 +1,70 @@
+BATCH()                                                                BATCH()
+
+
+
+NNAAMMEE
+       batch -
+
+DDEESSCCRRIIPPTTIIOONN
+       Using  AWS  Batch,  you  can  run  batch computing workloads on the AWS
+       Cloud. Batch computing is a common means  for  developers,  scientists,
+       and  engineers  to access large amounts of compute resources. AWS Batch
+       utilizes the advantages of this computing workload to remove the undif-
+       ferentiated  heavy  lifting of configuring and managing required infra-
+       structure, while also adopting  a  familiar  batch  computing  software
+       approach. Given these advantages, AWS Batch can help you to efficiently
+       provision resources in response to  jobs  submitted,  thus  effectively
+       helping  to  eliminate  capacity constraints, reduce compute costs, and
+       deliver your results more quickly.
+
+       As a fully managed service, AWS Batch can run batch computing workloads
+       of  any scale. AWS Batch automatically provisions compute resources and
+       optimizes workload distribution based on the quantity and scale of your
+       specific  workloads. With AWS Batch, there's no need to install or man-
+       age batch computing software. This means that you can focus  your  time
+       and energy on analyzing results and solving your specific problems.
+
+AAVVAAIILLAABBLLEE CCOOMMMMAANNDDSS
+       +o cancel-job
+
+       +o create-compute-environment
+
+       +o create-job-queue
+
+       +o delete-compute-environment
+
+       +o delete-job-queue
+
+       +o deregister-job-definition
+
+       +o describe-compute-environments
+
+       +o describe-job-definitions
+
+       +o describe-job-queues
+
+       +o describe-jobs
+
+       +o help
+
+       +o list-jobs
+
+       +o list-tags-for-resource
+
+       +o register-job-definition
+
+       +o submit-job
+
+       +o tag-resource
+
+       +o terminate-job
+
+       +o untag-resource
+
+       +o update-compute-environment
+
+       +o update-job-queue
+
+
+
+                                                                       BATCH()
