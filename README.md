@@ -116,5 +116,6 @@ However it only is pinging when the job starts (or fails to start), not the outc
 - [ ] work out GCP equivalent
 - [ ] Test AWS AppRunnner for frontend
 - [ ] Look into VPC settings
+- [ ] Look into Pulumi using [https://www.pulumi.com/tf2pulumi/](https://www.pulumi.com/tf2pulumi/) - WIP on [this branch](https://github.com/mattarderne/meltano-batch/tree/pulumi/pulumi)
 
 
