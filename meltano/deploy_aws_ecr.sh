@@ -1,7 +1,7 @@
 #!/bin/bash
 REGION="eu-west-1"
 TAG="latest"
-ECR_REPOSITORY="579337656087.dkr.ecr.eu-west-1.amazonaws.com/meltano-batch-ecr-repo"
+ECR_REPOSITORY="<account_number>.dkr.ecr.eu-west-1.amazonaws.com/meltano-batch-ecr-repo"
 # Get the ECR_REPOSITORY from the output of the Terraform apply command
 
 # Retrieve an authentication token and authenticate your Docker client to your registry.
