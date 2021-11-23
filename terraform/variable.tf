@@ -8,6 +8,10 @@ variable "aws_account" {
   # default = "12354"
 }
 
+variable "job_frequency" {
+  description = "Frequncy to run jobs (type day/hour/minute)"
+}
+
 variable "prefix" {
   description = "TODO: Change this to whatever you'd like to prefix the project infrastructure and set as the tags for the project"
   default     = "meltano-batch"

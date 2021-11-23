@@ -19,6 +19,14 @@ data "aws_vpc" "default" {
   default = true
 }
 
+locals {
+  # Common tags to be assigned to all resources
+  common_tags = {
+    Project = var.prefix
+    Env     = var.env
+  }
+}
+
 # retrieves the subnet ids in the default vpc
 data "aws_subnet_ids" "all" {
   vpc_id = data.aws_vpc.default.id
@@ -51,10 +59,7 @@ resource "aws_iam_role" "instance-role" {
 }
 EOF
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 
@@ -67,10 +72,7 @@ resource "aws_iam_instance_profile" "instance-role" {
   name = "${var.prefix}-role"
   role = aws_iam_role.instance-role.name
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 
@@ -93,10 +95,7 @@ resource "aws_iam_role" "aws-batch-service-role" {
 }
 EOF
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "aws-batch-service-role" {
@@ -116,10 +115,7 @@ resource "aws_security_group" "meltano-batch" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 
@@ -140,10 +136,7 @@ resource "aws_batch_compute_environment" "meltano" {
   type         = "MANAGED"
   depends_on   = [aws_iam_role_policy_attachment.aws-batch-service-role]
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 
@@ -153,20 +146,14 @@ resource "aws_batch_job_queue" "meltano" {
   priority             = 1
   compute_environments = [aws_batch_compute_environment.meltano.arn]
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 
 resource "aws_ecr_repository" "meltano-job-repo" {
   name = "${var.prefix}-ecr-repo"
 
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 
 }
 

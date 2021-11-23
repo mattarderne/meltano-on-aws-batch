@@ -4,12 +4,9 @@
 resource "aws_cloudwatch_event_rule" "frequency" {
   name                = "job-frequency"
   description         = "Determines the frequency of Job runs (day/hour/minute), can also be cron(0 20 * * ? *)."
-  schedule_expression = "rate(1 hour)"
+  schedule_expression = "rate(1 ${var.job_frequency})"
   is_enabled          = true
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 }
 
 # Configure Job by changing the "command" list
@@ -35,11 +32,13 @@ resource "aws_batch_job_definition" "job-smoke-test" {
   ]
 }
 CONTAINER_PROPERTIES
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 }
+
+  # "secrets": [{
+  #     "name": "${var.environment_variable_name}",
+  #     "valueFrom": "arn:aws:secretsmanager:region:aws_account_id:secret:secret_name-AbCdEf"
+  #   }],
 
 # Lambda to run the job
 resource "aws_lambda_function" "submit-job-smoke-test" {
@@ -58,10 +57,7 @@ resource "aws_lambda_function" "submit-job-smoke-test" {
       ALERT_TOGGLE   = var.slack_webhook_toggle
     }
   }
-  tags = {
-    Project = var.prefix
-    Env     = var.env
-  }
+tags = local.common_tags
 }
 
 resource "aws_cloudwatch_event_target" "create_job_frequency" {
