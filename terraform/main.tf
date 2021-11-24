@@ -124,7 +124,8 @@ resource "aws_security_group" "meltano-batch" {
 }
 
 resource "aws_batch_compute_environment" "meltano" {
-  compute_environment_name = "${var.prefix}-compute"
+  compute_environment_name_prefix = "${var.prefix}-meltano"
+
   compute_resources {
     instance_role = aws_iam_instance_profile.instance-role.arn
     instance_type = [
@@ -139,6 +140,10 @@ resource "aws_batch_compute_environment" "meltano" {
   service_role = aws_iam_role.aws-batch-service-role.arn
   type         = "MANAGED"
   depends_on   = [aws_iam_role_policy_attachment.aws-batch-service-role]
+  
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = {
     Project = var.prefix
