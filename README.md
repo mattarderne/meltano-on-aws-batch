@@ -110,12 +110,14 @@ However it only is pinging when the job starts (or fails to start), not the outc
 
 # Todo
 
+**AWS**
 - [ ] setup a serverless DB to capture state files for incremental loads
-- [ ] work out SNS
+- [ ] Adopt Batch [best practices](https://aws.amazon.com/blogs/hpc/aws-batch-best-practices/)
 - [ ] work out SNS in Terraform
-- [ ] work out GCP equivalent
 - [ ] Test AWS AppRunnner for frontend
 - [ ] Look into VPC settings
+**Misc**
+- [ ] work out GCP equivalent
 - [ ] Look into Pulumi using [https://www.pulumi.com/tf2pulumi/](https://www.pulumi.com/tf2pulumi/) - WIP on [this branch](https://github.com/mattarderne/meltano-batch/tree/pulumi/pulumi)
 
 
