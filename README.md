@@ -113,6 +113,7 @@ However it only is pinging when the job starts (or fails to start), not the outc
 **AWS**
 - [ ] setup a serverless DB to capture state files for incremental loads
 - [ ] Adopt Batch [best practices](https://aws.amazon.com/blogs/hpc/aws-batch-best-practices/)
+- [ ] look into github actions
 - [ ] work out SNS in Terraform
 - [ ] Test AWS AppRunnner for frontend
 - [ ] Look into VPC settings
