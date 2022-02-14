@@ -78,6 +78,15 @@ docker run \
     ui
 ```
 
+# Resourcing
+
+Depending on the size of the data transferred, you may need to increas the AWS Batch `resource "aws_batch_job_definition"` by editing the following fields from 2-8 vcpus and 2GB to 8GB ram
+```
+  "vcpus": 2 -> 8,
+  "memory": 2000 -> 8000,
+```
+
+
 # Notifications
 
 By default there are no notifications set. Ideally this should be set by an AWS SNS system.
@@ -113,7 +122,7 @@ However it only is pinging when the job starts (or fails to start), not the outc
 **AWS**
 - [ ] setup a serverless DB to capture state files for incremental loads
 - [ ] Adopt Batch [best practices](https://aws.amazon.com/blogs/hpc/aws-batch-best-practices/)
-- [ ] look into github actions
+- [ ] look into github actions as an alternative
 - [ ] work out SNS in Terraform
 - [ ] Test AWS AppRunnner for frontend
 - [ ] Look into VPC settings
