@@ -1,5 +1,10 @@
 # meltano-batch
-Running Meltano ELT on AWS Batch, infra with Terraform
+Running Meltano ELT on AWS Batch, infra with Terraform. 
+
+A service to setup a repeatable Meltano ELT process, with smoke-tests installed.
+It runs the Meltano ELT process only, and does not provide a Meltano frontend (which as of writing is not essential)
+
+If you are looking for an even simpler approach, then I strongly recommend taking a look at [Meltano-on-Github-Actions](https://github.com/brooklyn-data/meltano-on-github-actions) as it is much simpler and requires less Devops hassle.
 
 ## Prerequisites
 
@@ -122,7 +127,7 @@ However it only is pinging when the job starts (or fails to start), not the outc
 **AWS**
 - [ ] setup a serverless DB to capture state files for incremental loads
 - [ ] Adopt Batch [best practices](https://aws.amazon.com/blogs/hpc/aws-batch-best-practices/)
-- [ ] look into github actions as an alternative
+- [X] look into github actions as an alternative done - [Meltano-on-Github-Actions](https://github.com/brooklyn-data/meltano-on-github-actions)
 - [ ] work out SNS in Terraform
 - [ ] Test AWS AppRunnner for frontend
 - [ ] Look into VPC settings
