@@ -1,10 +1,12 @@
 # meltano-batch
-Running Meltano ELT on AWS Batch, infra with Terraform. 
+A simple setup of Meltano ELT on AWS Batch, managing the infrastructure with Terraform. 
 
 A service to setup a repeatable Meltano ELT process, with smoke-tests installed.
 It runs the Meltano ELT process only, and does not provide a Meltano frontend (which as of writing is not essential)
 
 If you are looking for an even simpler approach, then I strongly recommend taking a look at [Meltano-on-Github-Actions](https://github.com/brooklyn-data/meltano-on-github-actions) as it is much simpler and requires less Devops hassle.
+
+The only reason not to use Github actions is if you require much longer running loads, or control over the infrastructure specifications, or the movement to be fully contained within an AWS environment. 
 
 ## Prerequisites
 
