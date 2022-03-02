@@ -1,7 +1,7 @@
 # meltano-batch
 A simple setup of [Meltano Extract and Load](https://docs.meltano.com/guide/integration) on [AWS Batch](https://aws.amazon.com/batch/), managing the infrastructure with [Terraform](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/batch_compute_environment). 
 
-A service to setup a repeatable Meltano ELT process, with smoke-tests installed.
+A service to setup a repeatable Meltano EL process, with smoke-tests installed.
 Runs the Meltano ELT process only, and does not provide a Meltano frontend (which as of writing is not essential)
 
 If you are looking for an even simpler approach, then I strongly recommend taking a look at [Meltano-on-Github-Actions](https://github.com/brooklyn-data/meltano-on-github-actions) as it is much simpler and requires less Devops hassle.
